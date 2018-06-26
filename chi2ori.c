@@ -60,6 +60,8 @@ for (int i=0;i<200;i++){
   else
   {
     contri=diff_squared[i]/ini_flux[i];
+    // with 30% normalization error
+    // contri=diff_squared[i]/(ini_flux[i]+pow((0.3*ini_flux[i]),2));
     chi_squared+=contri;
   }
 }
