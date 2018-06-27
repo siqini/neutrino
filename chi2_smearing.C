@@ -7,7 +7,7 @@
 
 double chi2(double sin_squared, double dms){
   // read data in the initial flux text file into a 1D array
-  double resolution=0.25;
+  double resolution=0.15;
   std::ifstream myfile;
   myfile.open("initial.txt", std::ios::in|std::ios::out|std::ios::binary);
   std::vector<double> initial_flux_vec;
@@ -26,6 +26,24 @@ double chi2(double sin_squared, double dms){
 
   double* ini_flux= initial_flux_vec.data();
 
+double null_events_smeared[200];
+for (int i=0;i<200;i++){
+  double total=0.;
+  for (int j=0;j<200;j++){
+    double xi=0.025+0.05*i;
+    double xj=0.025+0.05*j;
+    double yj=ini_flux[j];
+    double sigma=resolution*sqrt(xj);
+    auto gaussian_scaler=ROOT::Math::gaussian_pdf(xi,sigma,xj);
+    total +=yj*gaussian_scaler;
+  }
+  null_events_smeared[i]=total*0.05;
+}
+
+
+
+
+
 // compute the probability array
   double prob_arr [200];
       for (int i=0;i<200;i++){
@@ -40,24 +58,9 @@ double chi2(double sin_squared, double dms){
 // compute the oscillated flux
 double osc_flux[200];
   for (int i=0;i<200;i++)
-    osc_flux[i]=prob_arr[i]*ini_flux[i];
+    osc_flux[i]=prob_arr[i]*null_events_smeared[i];
 
-//smear it!
-//TFile *flux=new TFile("flux.root");
-//TH1D *hist=(TH1D*)flux->Get("numu_CV_AV_TPC");
-//TH1D histh=*hist;
-double osc_flux_smeared[200];
-for (int i=0;i<200;i++){
-  double total=0.;
-  for (int j=0;j<200;j++){
-    double xi=0.025+0.05*i;
-    double xj=0.025+0.05*j;
-    double yj=osc_flux[j];
-    auto gaussian_scaler=ROOT::Math::gaussian_pdf(xi,xj*resolution,xj);
-    total += yj*gaussian_scaler;
-  }
-  osc_flux_smeared[i]=total*0.05;
-}
+
 
 double diff[200];
 double diff_squared[200];
@@ -65,16 +68,16 @@ double errors[200];
 double contri;
 double chi_squared=0.;
 for (int i=0;i<200;i++){
-  diff[i]=ini_flux[i]-osc_flux[i];
+  diff[i]=null_events_smeared[i]-osc_flux[i];
 }
 for (int i=0;i<200;i++){
   diff_squared[i]=pow(diff[i],2.);
 }
 for (int i=0;i<200;i++){
-  errors[i]=osc_flux_smeared[i] + (osc_flux_smeared[i]/pow(ini_flux[i],0.5));
+  errors[i]=osc_flux[i] + (osc_flux[i]/pow(null_events_smeared[i],0.5));
 }
 for (int i=0;i<200;i++){
-  if (ini_flux[i]==0.) continue;
+  if (null_events_smeared[i]==0.) continue;
   else
   {
     contri=diff_squared[i]/errors[i];
@@ -95,7 +98,6 @@ void chi2_smearing(){
   TH1D *hist=(TH1D*)flux->Get("numu_CV_AV_TPC");
   c.cd(1);
   hist->Draw();
-
   TFile *x_sec=new TFile("cross_section.root");
   TGraph *x_sec_graph=(TGraph*)x_sec->Get("qel_cc_n");
   c.cd(2);
@@ -169,6 +171,10 @@ chi2_avg=chi2_sum/(double)chi2_vec.size();
    TCanvas *c=new TCanvas("c", "chi^2 distribution", 1000,1000);
    TH2D *select_contours=new TH2D("select_contours","Select Contours",199,angles,399,masses);
    int pts_counter=0;
+   //std::ofstream outputFile;
+   std::ofstream selected;
+   std::string filename1="selected_pts.csv";
+   selected.open("selected_pts.csv", std::ios::out);
    for (int i=0;i<200;i++){
      for (int j=0;j<400;j++){
        /*
@@ -181,9 +187,11 @@ chi2_avg=chi2_sum/(double)chi2_vec.size();
          select_contours->Fill(angles[i],masses[j],7.74);
         }
         */
-       if((chi2_2d_arr[i][j+1]>23.4 && chi2_2d_arr[i][j-1]<23.4)||(chi2_2d_arr[i+1][j]>23.4 && chi2_2d_arr[i-1][j]<23.4)){
+       //if((chi2_2d_arr[i][j+1]>23.4 && chi2_2d_arr[i][j-1]<23.4)||(chi2_2d_arr[i+1][j]>23.4 && chi2_2d_arr[i-1][j]<23.4)){
+       if (chi2_2d_arr[i][j]<24. && chi2_2d_arr[i][j]>23.){
          pts_counter++;
          select_contours->Fill(angles[i],masses[j],23.4);
+         selected<<angles[i]<<" "<<masses[j]<<" "<<chi2_2d_arr[i][j]<<std::endl;
         }
      }
    }
@@ -208,7 +216,6 @@ chi2_avg=chi2_sum/(double)chi2_vec.size();
    gPad->SetLogx();
    gPad->SetLogz();
    gStyle->SetPalette(1);
-
    g->Draw("CONT5");
    */
 }
