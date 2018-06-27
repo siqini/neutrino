@@ -67,5 +67,24 @@ void resoln_uncertainty(){
       cov->SetBinContent(i+1,j+1,v);
     }
   }
-  cov->Draw("COLZ");
+
+  TH2D *cor=new TH2D("cor", "correlation matrix;Bin index;Bin index",nbins,0.,(double)nbins,nbins,0.,(double)nbins);
+
+  //loop over bins i,j
+  for (int i=0;i<nbins;i++){
+    for (int j=0;j<nbins;j++){
+      auto v=cov->GetBinContent(i+1,j+1);
+      auto eii=cov->GetBinContent(i+1,i+1);
+      auto ejj=cov->GetBinContent(j+1,j+1);
+      cor->SetBinContent(i+1,j+1,v/sqrt(eii*ejj));
+    }
+  }
+  cor->GetZaxis()->SetRangeUser(-1,1);
+  cor->Draw();
+
+
+
+
+
+  //cov->Draw("COLZ");
 }
