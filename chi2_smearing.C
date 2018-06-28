@@ -26,6 +26,28 @@ double chi2(double sin_squared, double dms){
 
   double* ini_flux= initial_flux_vec.data();
 
+double sbnd_events[200];
+double sbnd_distance_scaler=pow((600./100.),2);
+for (int i=0;i<200;i++){
+  sbnd_events[i]=ini_flux[i]*sbnd_distance_scaler;
+}
+
+//smear at 100m for SBND
+double sbnd_events_smeared[200];
+for (int i=0;i<200;i++){
+  double total=0.;
+  for (int j=0;j<200;j++){
+    double xi=0.025+0.05*i;
+    double xj=0.025+0.05*j;
+    double yj=sbnd_events[j];
+    double sigma=resolution*sqrt(xj);
+    auto gaussian_scaler=ROOT::Math::gaussian_pdf(xi,sigma,xj);
+    total +=yj*gaussian_scaler;
+  }
+  sbnd_events_smeared[i]=total*0.05;
+}
+
+
 double null_events_smeared[200];
 for (int i=0;i<200;i++){
   double total=0.;
@@ -74,10 +96,10 @@ for (int i=0;i<200;i++){
   diff_squared[i]=pow(diff[i],2.);
 }
 for (int i=0;i<200;i++){
-  errors[i]=osc_flux[i] + (osc_flux[i]/pow(null_events_smeared[i],0.5));
+  errors[i]=osc_flux[i] + (osc_flux[i]/pow(sbnd_events_smeared[i],0.5));
 }
 for (int i=0;i<200;i++){
-  if (null_events_smeared[i]==0.) continue;
+  if (sbnd_events_smeared[i]==0.) continue;
   else
   {
     contri=diff_squared[i]/errors[i];
