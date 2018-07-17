@@ -1,0 +1,141 @@
+\documentclass[12pt]{article}
+\usepackage{latexsym, amscd, amsfonts, eucal, mathrsfs, amsmath, mathabx, amsthm, xypic,xr, color, enumerate}
+\usepackage{multicol}
+\usepackage[all]{xy}
+\usepackage{fullpage}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{siunitx}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{courier}
+\usepackage{subcaption}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{fact}[theorem]{Fact}
+\newtheorem{principle}[theorem]{Principle}
+
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{construction}[theorem]{Construction}
+\newtheorem{convention}[theorem]{Convention}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{counterexample}[theorem]{Counterexample}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{notation}[theorem]{Notation}
+\newtheorem{warning}[theorem]{Warning}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{observation}[theorem]{Observation}
+\newcommand{\dd}{\mathrm{d}}
+\usepackage{physics}
+\usepackage{scrextend}
+
+\begin{document}
+\title{Frames}
+\author{}
+\date{\today}
+\maketitle
+\linespread{2}
+Here are the problems with the pieces that we noticed:
+\begin{enumerate}
+  \item Large gap widths in frame upper edges as in Figure~\ref{gapwidth1} and Figure~\ref{gapwidth2};
+  \begin{figure}[!ht]
+    \centering
+    \includegraphics[scale=0.05]{pic1.jpg}
+    \caption{Two of the gaps}
+    \label{gapwidth1}
+  \end{figure}
+  \begin{figure}[!ht]
+    \centering
+    \includegraphics[scale=0.05]{pic5.jpg}
+    \caption{and the other two gaps}
+    \label{gapwidth2}
+  \end{figure}
+
+  \item Stocks do not align on the edges as in Figure~\ref{notalign};
+  \begin{figure}[!ht]
+    \centering
+    \includegraphics[scale=0.05]{pic2.jpg}
+    \caption{Stocks do not align perfectly}
+    \label{notalign}
+  \end{figure}
+
+  \item Hole to hole distances are off as in Figure~\ref{longstock} and Figure~\ref{shortstock};
+  \begin{figure}[!ht]
+    \centering
+    \includegraphics[scale=0.05]{long_stock.jpg}
+    \caption{On the long stock, the hole to hole distance is too long}
+    \label{longstock}
+  \end{figure}
+  \begin{figure}[!ht]
+    \centering
+    \includegraphics[scale=0.05]{short_stock.jpg}
+    \caption{On the short stock, the distance between the closest is too long }
+    \label{shortstock}
+  \end{figure}
+
+  \item Gaps between the stock and the horizontal as in Figure~\ref{nothorizontal1} and Figure~\ref{nothorizontal2};
+  \begin{figure}[!ht]
+    \centering
+    \includegraphics[scale=0.05]{not_horizontal_1.jpg}
+    \caption{Gap between the stock and the horizontal-1}
+    \label{nothorizontal1}
+  \end{figure}
+  \begin{figure}[!ht]
+    \centering
+    \includegraphics[scale=0.05]{not_horizontal_2.jpg}
+    \caption{Gap between the stock and the horizontal-2}
+    \label{nothorizontal2}
+  \end{figure}
+
+  \item The thin stripes bend as in Figure~\ref{bending};
+
+  \begin{figure}[!ht]
+    \centering
+    \includegraphics[scale=0.05]{bending.jpg}
+    \caption{Stripes bend}
+    \label{bending}
+  \end{figure}
+
+  \item Dimensions of the thin stripes are off: the short stripes are 42.1875in and 42.3125in, shorter than the designed length 42.528in; the long stripes are 48.4375in and 48.5in, much shorter than the designed length 49.134in. They also bend even when clamped, as in Figure 9-13.
+  \begin{figure}[!ht]
+    \centering
+       \includegraphics[scale=0.05]{stripe1.jpg}
+       \label{stripe1}
+       \caption{stripe 1}
+  \end{figure}
+  \begin{figure}[!ht]
+    \centering
+       \includegraphics[scale=0.05]{stripe2.jpg}
+       \label{stripe2}
+       \caption{stripe 2}
+  \end{figure}
+     \begin{figure}
+       \centering
+       \includegraphics[scale=0.05]{stripe3.jpg}
+       \label{stripe3}
+       \caption{stripe 3}
+     \end{figure}
+     \begin{figure}
+       \centering
+       \includegraphics[scale=0.05]{stripe4.jpg}
+       \label{stripe4}
+       \caption{stripe 4}
+     \end{figure}
+     \begin{figure}
+       \centering
+       \includegraphics[scale=0.05]{stripe5.jpg}
+       \label{stripe5}
+       \caption{stripe 5}
+     \end{figure}
+\end{enumerate}
+\end{document}
